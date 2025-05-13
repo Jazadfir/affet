@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <title>Barışalım mı?</title>
+  <style>
+    body {
+      background-color: black;
+      color: white;
+      text-align: center;
+      font-family: Arial, sans-serif;
+      height: 100vh;
+      margin: 0;
+      overflow: hidden;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+    img {
+      width: 150px;
+      height: 150px;
+      border-radius: 15px;
+      margin: 20px 0;
+    }
+    .message {
+      font-size: 20px;
+      margin-bottom: 20px;
+    }
+    .buttons {
+      position: relative;
+      width: 300px;
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+    }
+    .buttons button {
+      background-color: red;
+      border: none;
+      color: white;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      border-radius: 5px;
+      position: absolute; /* mutlak konumlama için */
+    }
+  </style>
+</head>
+<body>
+  <div class="message">
+    Seni üzdüğüm için özür dilerim.<br>
+    Barışalım mı güzelim ????????
+  </div>
+  <img src="cat.gif" alt="Sevimli kedi">
+  <div class="buttons">
+    <button id="yesBtn" style="position: relative; left: 0; top: 0;">EVET</button>
+    <button id="noBtn">HAYIR</button>
+  </div>
+
+  <script>
+    const noBtn  = document.getElementById('noBtn');
+    const yesBtn = document.getElementById('yesBtn');
+
+    // Sayfa içindeki dört bölge (A, B, C, D) için örnek koordinatlar:
+    const regions = [
+      { left: 80,   top:  90   }, // A: üst-sol köşe
+      { left: window.innerWidth - 40, top: 20   }, // B: üst-sağ köşe
+      { left: window.innerWidth - 80, top: window.innerHeight - 60 }, // C: alt-sağ
+      { left: 20,   top: window.innerHeight - 60 }  // D: alt-sol
+    ];
+    let regionIndex = 0;
+
+    // "HAYIR"a tıklayınca sıradaki bölgeye taşı
+    noBtn.addEventListener('click', () => {
+      const r = regions[regionIndex % regions.length];
+      noBtn.style.left = r.left + 'px';
+      noBtn.style.top  = r.top  + 'px';
+      regionIndex++;
+    });
+
+    // "EVET"e tıklanınca pop-up aç
+    yesBtn.addEventListener('click', () => {
+      const popup = window.open('', 'popup',
+        'width=400,height=400,toolbar=no,menubar=no,scrollbars=no');
+      popup.document.write(`
+        <!DOCTYPE html>
+        <html lang="tr">
+        <head>
+          <meta charset="UTF-8">
+          <title>Sürpriz Mesaj</title>
+          <style>
+            body {
+              background-color: black;
+              color: white;
+              font-family: Arial, sans-serif;
+              text-align: center;
+              margin: 0;
+              padding: 20px;
+            }
+            img {
+              max-width: 100%;
+              border-radius: 10px;
+            }
+            .text {
+              margin-top: 15px;
+              font-size: 18px;
+            }
+          </style>
+        </head>
+        <body>
+          <img src="suprice.jpg" alt="Sürpriz Foto">
+          <div class="text">
+            Seni Seviyorum<br>
+            Beni Affedeceğini Biliyordum
+          </div>
+        </body>
+        </html>
+      `);
+      popup.document.close();
+    });
+
+    // Pencere boyutu değişince de güncelleme yapalım
+    window.addEventListener('resize', () => {
+      regions[1].left = window.innerWidth - 120;
+      regions[2].left = window.innerWidth - 120;
+      regions[2].top  = window.innerHeight - 60;
+      regions[3].top  = window.innerHeight - 60;
+    });
+  </script>
+</body>
+</html>
